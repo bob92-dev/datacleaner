@@ -18,7 +18,3 @@ def mailMe(exp,dest,log, mdp, subject, my_message, join_piece):
     mailserver.quit()
 
 
-mailMe('boblepongedev92','svenlehamster@gmail.com','boblepongedev92@gmail.com','spongebob;', 'coucou', 'tu veux voir ma ?','tapiece.txt')
-mailMe('boblepongedev92','casselboris92@gmail.com','boblepongedev92@gmail.com','spongebob;', 'coucou', 'tu veux voir ma ?','tapiece.txt')
-
-
