@@ -16,7 +16,9 @@ def my_date():
 
 def checkPrice(price):
     # price sous la forme [1234]
+    print(price)
     S = price[1:-1]
+    print(S)
     try:
         priceInt = int(S)
     except:
@@ -48,25 +50,20 @@ def createList(fichier):
 def comparingTo(liste_marques, fichier_annonces):
 
      liste_marque_ok = []
+     print(fichier_annonces)
      with open(fichier_annonces,"r") as liste_annonce:
         reader = csv.reader(liste_annonce)
         reader = list(reader)
         #print(reader)
         for marque in liste_marques:
                 for annonce in reader:
-                        #print("annonce :" + annonce)
-                        for col in annonce:
-                            #print ("COL :" + col)
-                            #print(type(col))
-                            if marque in col:
-                               #print("MARQUE IN COL LIGNE 59" + str(annonce) + "MARQUE TROUVEE : " + str(marque))
-                               #print(col["id"])
-                               liste_marque_ok.append(str(annonce))
+                    url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
+
+                    if marque in title or marque in text:
+                        liste_marque_ok.append(str(annonce))
 
 
-#     print("LISTE ANNONCE \n" + str(liste_annonce))
-#     print("LIST MARQUES \n " + str(liste_marques))
-     #   print("LISTES MARQUES OK + APRES BOUCLE \n" + str(liste_marque_ok))
+
         return liste_marque_ok
 
 def cleanerNew(fichier):
@@ -76,7 +73,7 @@ def cleanerNew(fichier):
         reader = csv.reader(f)
 
         # On saute la première ligne
-        #next(reader)
+        next(reader)
 
         for line in reader:
             # TODO : Chaque ligne doit contenir 9 colonnes. Sinon on ne peut pas. Traiter l'erreur
@@ -90,9 +87,11 @@ def cleanerNew(fichier):
                 #print("c'est l'id 84" + id)
                 #print ("c'ets la ligne" + str(line))
 
+
                 # On traite chaque colonne pour s'assurer qu'elles sont correctes
                 checked_price = checkPrice(price)
                 #print ("ici le checked price ligne 86" + checked_price)
+
                 if checked_price is not None:
                    # print(" ici le checked price de la ligne 89" + str(checked_price))
                     ma_liste_a_retourner.append(str(line))
@@ -100,7 +99,8 @@ def cleanerNew(fichier):
 
                 else:
                     ma_liste_pourrie.append(str(line))
-
+            else:
+                print("erreur sur le nombre de colonnes")
         bad_data = "{}/{}_bad_data.csv".format(output_dir, file_prefix)
 
         with open(bad_data, "w") as bad:
@@ -150,5 +150,5 @@ maListefinale = comparingTo(createList("marques.csv"),lbc_price)
 print(str(maListefinale))
 with open ("fichierfinal.csv","w") as fichierfini:
     for item in maListefinale:
-                fichierfini.write(item + '\n')
+        fichierfini.write(item + '\n')
     fichierfini.close()
