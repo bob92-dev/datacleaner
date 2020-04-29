@@ -8,11 +8,14 @@ import shutil
 import mail
 # TODO /: enlever les doublons => les doublons peuvent etre identifiés par l'id de l'annonce
 # TODO : commenter le code
-# TODO : ajouter dans les fichiers de sortie, la premierere ligne du fichier initial qui contient le nom des col
+# TODO : ajouter dans les fichiers de sortie, la premiere ligne du fichier initial qui contient le nom des col
 
 ################################# FONCTIONS######################################################
 
         ######################### CREATION DATE###########################################@
+"""
+function that returns the current date with a particular format
+"""
 def my_date():
     date = datetime.datetime.now()
     date_clean = date.strftime("%d-%m-%Y")
@@ -21,54 +24,66 @@ def my_date():
 
 
 ######################### EXTRACTION DU FICHIER MARQUES ###########################################@
-
-def createList(fichier):
-    with open(fichier, "r") as f:
-        liste_marques = []
+"""
+function that take a file as a parameter, retrieves its content and return it in the form of a list
+"""
+def createList(file):
+    with open(file, "r") as f:
+        brands_list = []
         reader = csv.reader(f)
 
         next(reader)
 
         for line in reader:
             if len(line) == 2:
-                marque, nbr_modele = line
-                liste_marques.append(marque)
+                brand, nbr_modele = line
+                brands_list.append(brand)
 
-        print(liste_marques)
-        return liste_marques
+        print(brands_list)
+        return brands_list
 
 ######################### VERIFICATION COHERENCE PRIX ###########################################@
+"""
+function that takes two parameters, one list and one file,
+ search in the file for existing entries from the list,
+ and add theses to a new list
+ returns this new list
+"""
 
+def comparingTo(brands_list, ad_file):
 
-def comparingTo(liste_marques, fichier_annonces):
-
-     liste_marque_ok = []
-     print(fichier_annonces)
-     with open(fichier_annonces,"r") as liste_annonce:
-        reader = csv.reader(liste_annonce)
+     brands_list_ok = []
+     print(ad_file)
+     with open(ad_file, "r") as ad_list:
+        reader = csv.reader(ad_list)
         reader = list(reader)
         #print(reader)
 
 
-        for marque in liste_marques:
-                for annonce in reader:
-                            if len(annonce) == 9:
-                                url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
-                                if marque in title or marque in text:
-                                    if marque in title or marque in text:
-                                        liste_marque_ok.append(annonce)
+        for brand in brands_list:
+                for ad in reader:
+                            if len(ad) == 9:
+                                url, id, publish_date, expiration_date, title, text, price, city, postal_code = ad
+                                if brand in title or brand in text:
+                                    if brand in title or brand in text:
+                                        brands_list_ok.append(ad)
 
 
-        return liste_marque_ok
+        return brands_list_ok
 
 
             ######################### VERIFICATION COHERENCE DES MARQUES  ###########################################@
 
-
-def cleanerNew(fichier):
-    with open(fichier, "r") as f:
-        ma_liste_a_retourner = []
-        ma_liste_pourrie = []
+"""
+function that take a file as a parameter, retrieves its content , 
+verify that certain characteristics are respected,
+if they are, adds them to a list,
+returns this list
+"""
+def cleanerNew(file):
+    with open(file, "r") as f:
+        good_list = []
+        bad_list = []
         reader = csv.reader(f)
 
         # On saute la première ligne
@@ -87,18 +102,18 @@ def cleanerNew(fichier):
                 #print ("ici le checked price ligne 86" + checked_price)
 
                 if checked_price is not None:
-                    ma_liste_a_retourner.append(line)
+                    good_list.append(line)
 
 
                 else:
-                    ma_liste_pourrie.append(line)
+                    bad_list.append(line)
             else:
                 print("erreur sur le nombre de colonnes")
         bad_data = "{}/{}_bad_data.csv".format(output_dir, file_prefix)
 
         with open(bad_data, "w") as bad:
             badwriter =csv.writer(bad)
-            for item in ma_liste_pourrie:
+            for item in bad_list:
                 badwriter.writerow(item)
                 #message="erreur lors du clean" + bad_data
                 #mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
@@ -106,12 +121,17 @@ def cleanerNew(fichier):
 
             bad.close()
 
-        return ma_liste_a_retourner
+        return good_list
 
 
 
                 ######################### VERIFICATION COHERENCE DES PRIX ###########################################@
-
+"""
+function that takes a string as parameter,
+slice it and cast it into an integer,
+and verifies the consistency of the data
+return the integer
+"""
 def checkPrice(price):
     # price sous la forme [1234]
     print(price)
@@ -166,9 +186,9 @@ with open(lbc_price, "w") as f:
     f.close()
 
 
-maListefinale = comparingTo(createList("marques.csv"),lbc_price)
-with open ("fichierfinal.csv","w") as fichierfini:
-    finalwriter = csv.writer(fichierfini)
-    for item in maListefinale:
+final_list = comparingTo(createList("marques.csv"), lbc_price)
+with open ("fichierfinal.csv","w") as final_file:
+    finalwriter = csv.writer(final_file)
+    for item in final_list:
         finalwriter.writerow(item)
-    fichierfini.close()
+    final_file.close()
