@@ -57,7 +57,9 @@ def comparingTo(liste_marques, fichier_annonces):
         #print(reader)
         for marque in liste_marques:
                 for annonce in reader:
-                    url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
+                    if len(annonce) == 9:
+                        url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
+
 
                     if marque in title or marque in text:
                         liste_marque_ok.append(str(annonce))
