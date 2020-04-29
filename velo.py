@@ -16,9 +16,9 @@ def my_date():
 
 def checkPrice(price):
     # price sous la forme [1234]
-    print(price)
+    #  print(price)
     S = price[1:-1]
-    print(S)
+    # print(S)
     try:
         priceInt = int(S)
     except:
@@ -30,6 +30,7 @@ def checkPrice(price):
     else:
         print("price format outbound")
         return None
+
 
 def createList(fichier):
     with open(fichier, "r") as f:
@@ -47,24 +48,20 @@ def createList(fichier):
         return liste_marques
 
 
-def comparingTo(liste_marques, fichier_annonces):
+def comparingTo(liste_marques, cleaned_array):
+    liste_marque_ok = []
+    for marque in liste_marques:
+        # print("Marques : " + marque)
+        for annonce in cleaned_array:
+            print("ANNONCES :" + annonce)
+            if len(annonce) == 9:
+                #  print("ANNONCES +len :" + annonce)
+                url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
+                if (marque in title) or (marque in text):
+                    liste_marque_ok.append(str(annonce))
+    #  print(liste_marque_ok)
+    return liste_marque_ok
 
-     liste_marque_ok = []
-     print(fichier_annonces)
-     with open(fichier_annonces,"r") as liste_annonce:
-        reader = csv.reader(liste_annonce)
-        reader = list(reader)
-        #print(reader)
-        for marque in liste_marques:
-                for annonce in reader:
-                    url, id, publish_date, expiration_date, title, text, price, city, postal_code = annonce
-
-                    if marque in title or marque in text:
-                        liste_marque_ok.append(str(annonce))
-
-
-
-        return liste_marque_ok
 
 def cleanerNew(fichier):
     with open(fichier, "r") as f:
@@ -76,24 +73,17 @@ def cleanerNew(fichier):
         next(reader)
 
         for line in reader:
-            # TODO : Chaque ligne doit contenir 9 colonnes. Sinon on ne peut pas. Traiter l'erreur
             # print len(line)
             if len(line) == 9:
-       #         print("it's ok on est dans cleanernew ligne 79")
                 # On récupère les 9 colonnes
                 # Source Url,Id,Date Publication Annonce,Date Expiration Annonce,Titre,Texte Central,Prix,Ville,Code Postal
                 url, id, publish_date, expiration_date, title, text, price, city, postal_code = line
-                #print ("c'est lurl ligne 84" + url)
-                #print("c'est l'id 84" + id)
-                #print ("c'ets la ligne" + str(line))
-
 
                 # On traite chaque colonne pour s'assurer qu'elles sont correctes
-                checked_price = checkPrice(price)
-                #print ("ici le checked price ligne 86" + checked_price)
 
+                checked_price = checkPrice(price)
                 if checked_price is not None:
-                   # print(" ici le checked price de la ligne 89" + str(checked_price))
+                    # print(" ici le checked price de la ligne 89" + str(checked_price))
                     ma_liste_a_retourner.append(str(line))
 
 
@@ -106,12 +96,12 @@ def cleanerNew(fichier):
         with open(bad_data, "w") as bad:
             for item in ma_liste_pourrie:
                 bad.write(item + '\n')
-                #message="erreur lors du clean" + bad_data
-               # mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
-                     #  'coucou', message, 'tapiecejointe.txt')
+                # message="erreur lors du clean" + bad_data
+            # mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
+            #  'coucou', message, 'tapiecejointe.txt')
 
             bad.close()
-
+        # print(type(ma_liste_a_retourner))
         return ma_liste_a_retourner
 
 
@@ -133,22 +123,14 @@ shutil.copy2(input_file, "{}/{}_backup.csv".format(output_dir, file_prefix))
 # Traitement de la colonne prix => fichier recevant
 lbc_price = "{}/{}_lbc_price_ok.csv".format(output_dir, file_prefix)
 
-
-print ("voici le lien du LBC price ligne 129" + lbc_price)
-
+# on crée le fichier de travail
 with open(lbc_price, "w") as f:
     cleaned_array = cleanerNew(input_file)
-    print(type(cleaned_array))
-    print ("coucou cleaned array" + str(cleaned_array))
-    for elem in cleaned_array:
-       # On saute une ligne entre chaque insertion
-       f.write(elem + '\n')
-   # print ("coucou f" + str(f))
+    # print(cleaned_array)
+    maListefinale = comparingTo(createList("marques.csv"), cleaned_array)
+    # print(maListefinale)
+    for elem in maListefinale:
+        # On saute une ligne entre chaque insertion
+        f.write(elem + '\n')
+    # print ("coucou f" + str(f))
     f.close()
-
-maListefinale = comparingTo(createList("marques.csv"),lbc_price)
-print(str(maListefinale))
-with open ("fichierfinal.csv","w") as fichierfini:
-    for item in maListefinale:
-        fichierfini.write(item + '\n')
-    fichierfini.close()
