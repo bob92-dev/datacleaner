@@ -29,6 +29,39 @@ def checkPrice(price):
         print("price format outbound")
         return None
 
+def createList(fichier):
+    with open(fichier, "r") as f:
+        liste_marques = []
+        reader = csv.reader(f)
+
+        next(reader)
+
+        for line in reader:
+            if len(line) == 2:
+                marque,nbre_modèles = line
+                liste_marques.append(marque)
+
+        print(liste_marques)
+        return liste_marques
+
+
+def comparingTo(liste_marques, liste_annonces):
+
+ liste_marque_ok = []
+ with open(liste_annonces,"r") as liste_annonce:
+    reader = csv.reader(liste_annonce)
+
+
+    for marque in liste_marques:
+        for annonce in liste_annonce:
+            for col in annonce:
+                if marque in col:
+                    liste_marque_ok.append(annonce)
+
+ print("liste annonce" + str(liste_annonce))
+ print("liste marques" + str(liste_marques))
+ print("liste marque ok" +str(liste_marque_ok))
+ return liste_marque_ok
 
 def cleanerNew(fichier):
     with open(fichier, "r") as f:
@@ -95,3 +128,6 @@ with open(lbc_price, "w") as f:
         # On saute une ligne entre chaque insertion
         f.write(elem + '\n')
     f.close()
+
+
+comparingTo(createList("marques.csv"),lbc_price)
