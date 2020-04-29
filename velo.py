@@ -8,6 +8,7 @@ import shutil
 import mail
 # TODO /: enlever les doublons => les doublons peuvent etre identifiés par l'id de l'annonce
 # TODO : commenter le code
+# TODO : ajouter dans les fichiers de sortie, la premierere ligne du fichier initial qui contient le nom des col
 
 ################################# FONCTIONS######################################################
 
