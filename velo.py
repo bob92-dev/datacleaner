@@ -34,7 +34,7 @@ def createList(fichier):
         liste_marques = []
         reader = csv.reader(f)
 
-       # next(reader)
+        next(reader)
 
         for line in reader:
             if len(line) == 2:
@@ -48,20 +48,25 @@ def createList(fichier):
 def comparingTo(liste_marques, fichier_annonces):
 
      liste_marque_ok = []
-     with open(fichier_annonces,"r+") as liste_annonce:
+     with open(fichier_annonces,"r") as liste_annonce:
         reader = csv.reader(liste_annonce)
-
-
+        reader = list(reader)
+        #print(reader)
         for marque in liste_marques:
-            for annonce in liste_annonce:
-                for col in annonce:
-                    if marque in col:
-                        liste_marque_ok.append(annonce)
+                for annonce in reader:
+                        #print("annonce :" + annonce)
+                        for col in annonce:
+                            #print ("COL :" + col)
+                            #print(type(col))
+                            if marque in col:
+                               print("MARQUE IN COL LIGNE 59" + str(annonce) + "MARQUE TROUVEE : " + str(marque))
 
-     print("LISTE ANNONCE \n" + str(liste_annonce))
-     print("LIST MARQUES \n " + str(liste_marques))
-     print("LISTES MARQUES OK + APRES BOUCLE \n" + str(liste_marque_ok))
-     return liste_marque_ok
+
+                               # liste_marque_ok.append(annonce)
+#     print("LISTE ANNONCE \n" + str(liste_annonce))
+#     print("LIST MARQUES \n " + str(liste_marques))
+#     print("LISTES MARQUES OK + APRES BOUCLE \n" + str(liste_marque_ok))
+ #    return liste_marque_ok"""
 
 def cleanerNew(fichier):
     with open(fichier, "r") as f:
@@ -76,7 +81,7 @@ def cleanerNew(fichier):
             # TODO : Chaque ligne doit contenir 9 colonnes. Sinon on ne peut pas. Traiter l'erreur
             # print len(line)
             if len(line) == 9:
-                print("it's ok on est dans cleanernew ligne 79")
+       #         print("it's ok on est dans cleanernew ligne 79")
                 # On récupère les 9 colonnes
                 # Source Url,Id,Date Publication Annonce,Date Expiration Annonce,Titre,Texte Central,Prix,Ville,Code Postal
                 url, id, publish_date, expiration_date, title, text, price, city, postal_code = line
