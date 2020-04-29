@@ -104,13 +104,14 @@ def cleanerNew(fichier):
         bad_data = "{}/{}_bad_data.csv".format(output_dir, file_prefix)
 
         with open(bad_data, "w") as bad:
-                bad.write(str(ma_liste_pourrie))
-                message="erreur lors du clean" + bad_data
-                mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
-                       'coucou', message, 'tapiecejointe.txt')
+            for item in ma_liste_pourrie:
+                bad.write(item + '\n')
+                #message="erreur lors du clean" + bad_data
+               # mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
+                     #  'coucou', message, 'tapiecejointe.txt')
 
-                bad.close()
-        #f.close()
+            bad.close()
+
         return ma_liste_a_retourner
 
 
