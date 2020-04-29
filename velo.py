@@ -153,8 +153,8 @@ shutil.copy2(input_file, "{}/{}_backup.csv".format(output_dir, file_prefix))
 # Traitement de la colonne prix => fichier recevant
 lbc_price = "{}/{}_lbc_price_ok.csv".format(output_dir, file_prefix)
 
+######################### STOCKAGE DES DONNES NETTOYEES  ###########################################@
 
-print ("voici le lien du LBC price ligne 129" + lbc_price)
 
 with open(lbc_price, "w") as f:
     cleaned_array = cleanerNew(input_file)
@@ -163,6 +163,7 @@ with open(lbc_price, "w") as f:
         my_writer.writerow(elem)
       # ancienne formule =>  f.write(elem + '\n')
     f.close()
+
 
 maListefinale = comparingTo(createList("marques.csv"),lbc_price)
 with open ("fichierfinal.csv","w") as fichierfini:
