@@ -59,14 +59,15 @@ def comparingTo(liste_marques, fichier_annonces):
                             #print ("COL :" + col)
                             #print(type(col))
                             if marque in col:
-                               print("MARQUE IN COL LIGNE 59" + str(annonce) + "MARQUE TROUVEE : " + str(marque))
+                               #print("MARQUE IN COL LIGNE 59" + str(annonce) + "MARQUE TROUVEE : " + str(marque))
+                               #print(col["id"])
+                               liste_marque_ok.append(str(annonce))
 
 
-                               # liste_marque_ok.append(annonce)
 #     print("LISTE ANNONCE \n" + str(liste_annonce))
 #     print("LIST MARQUES \n " + str(liste_marques))
-#     print("LISTES MARQUES OK + APRES BOUCLE \n" + str(liste_marque_ok))
- #    return liste_marque_ok"""
+     #   print("LISTES MARQUES OK + APRES BOUCLE \n" + str(liste_marque_ok))
+        return liste_marque_ok
 
 def cleanerNew(fichier):
     with open(fichier, "r") as f:
@@ -136,6 +137,7 @@ print ("voici le lien du LBC price ligne 129" + lbc_price)
 
 with open(lbc_price, "w") as f:
     cleaned_array = cleanerNew(input_file)
+    print(type(cleaned_array))
     print ("coucou cleaned array" + str(cleaned_array))
     for elem in cleaned_array:
        # On saute une ligne entre chaque insertion
@@ -143,4 +145,9 @@ with open(lbc_price, "w") as f:
    # print ("coucou f" + str(f))
     f.close()
 
-comparingTo(createList("marques.csv"),lbc_price)
+maListefinale = comparingTo(createList("marques.csv"),lbc_price)
+print(str(maListefinale))
+with open ("fichierfinal.csv","w") as fichierfini:
+    for item in maListefinale:
+                fichierfini.write(item + '\n')
+    fichierfini.close()
