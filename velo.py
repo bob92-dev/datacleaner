@@ -126,9 +126,9 @@ def cleanerNew(file):
             badwriter =csv.writer(bad)
             for item in bad_list:
                 badwriter.writerow(item)
-                message="erreur lors du clean" + bad_data
-                mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
-                "informations du jour", message, 'tapiecejointe.txt')
+                # message="erreur lors du clean" + bad_data
+                # mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
+                # "informations du jour", message, 'tapiecejointe.txt')
 
             bad.close()
 
