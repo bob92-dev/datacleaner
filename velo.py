@@ -155,13 +155,14 @@ def checkPrice(price):
 
 
     ######################### CREATION DU REPERTOIRE DESTINATION DES FICHIERS ###########################################@
-
-input_file = "leboncoin.csv"
-output_dir = "source_" + my_date()
+my_path = os.getcwd() +"/"
+input_file = my_path + "leboncoin.csv"
+print(input_file)
+output_dir = my_path + "source_" + my_date()
 file_prefix = "lbc_source_" + my_date()
 
 # Création répertoire de travail
-path = "source_" + my_date() + "/lbc_source_" + my_date()
+destination_path = my_path + "source_" + my_date() + "/lbc_source_" + my_date()
 try:
     os.mkdir(output_dir)
     print("Create directory source_{}".format(output_dir))
@@ -169,7 +170,7 @@ except:
     print("Use existing directory source_{}".format(my_date()))
 
 # Backup du fichier d'entrée dans le répertoire de travail (avant de commencer à jouer avec)
-shutil.copy2(input_file, "{}/{}_backup.csv".format(output_dir, file_prefix))
+#shutil.copy2(input_file, "{}/{}_backup.csv".format(output_dir, file_prefix))
 
 # Traitement de la colonne prix => fichier recevant
 lbc_price = "{}/{}_lbc_price_ok.csv".format(output_dir, file_prefix)
@@ -186,8 +187,9 @@ with open(lbc_price, "w") as f:
     f.close()
 
 
-final_list = comparingTo(createList("marques.csv"), lbc_price)
-with open ("fichierfinal.csv","w") as final_file:
+final_list = comparingTo(createList(my_path + "marques.csv"), lbc_price)
+final_file_output = output_dir + "/fichierfinal.csv"
+with open (final_file_output,"w") as final_file:
     finalwriter = csv.writer(final_file)
     for item in final_list:
         finalwriter.writerow(item)
