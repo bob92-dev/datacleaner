@@ -6,17 +6,18 @@ import os
 import csv
 import shutil
 import mail
-# TODO : commenter le code
+
 # TODO : ajouter dans les fichiers de sortie, la premiere ligne du fichier initial qui contient le nom des col
 
 ################################# FONCTIONS######################################################
 
 
         ######################### CREATION DATE###########################################@
-"""
-function that returns the current date with a particular format
-"""
+
 def my_date():
+    """
+    function that returns the current date with a particular format
+    """
     date = datetime.datetime.now()
     date_clean = date.strftime("%d-%m-%Y")
     return date_clean
@@ -24,10 +25,11 @@ def my_date():
 
 
 ######################### EXTRACTION DU FICHIER MARQUES ###########################################@
-"""
-function that take a file as a parameter, retrieves its content and return it in the form of a list
-"""
+
 def createList(file):
+    """
+    function that take a file as a parameter, retrieves its content and return it in the form of a list
+    """
     with open(file, "r") as f:
         brands_list = []
         reader = csv.reader(f)
@@ -43,20 +45,19 @@ def createList(file):
         return brands_list
 
 ######################### VERIFICATION COHERENCE PRIX ###########################################@
-"""
-function that takes two parameters, one list and one file,
- search in the file for existing entries from the list,
- and add theses to a new list,
- check for the duplicates,
- returns this new list
-"""
+
 
 def comparingTo(brands_list, ad_file):
-
-
-     brands_list_temporary = []
-     print(ad_file)
-     with open(ad_file, "r") as ad_list:
+    """
+    function that takes two parameters, one list and one file,
+     search in the file for existing entries from the list,
+     and add theses to a new list,
+     check for the duplicates,
+     returns this new list
+    """
+    brands_list_temporary = []
+    print(ad_file)
+    with open(ad_file, "r") as ad_list:
         reader = csv.reader(ad_list)
         reader = list(reader)
         #print(reader)
@@ -75,19 +76,20 @@ def comparingTo(brands_list, ad_file):
                     if i not in brands_list_ok:
                         brands_list_ok.append(i)
 
-        brands_list_ok.insert(0,list(first_line))
+
         return brands_list_ok
 
 
             ######################### VERIFICATION COHERENCE DES MARQUES  ###########################################@
 
-"""
-function that take a file as a parameter, retrieves its content , 
-verify that certain characteristics are respected,
-if they are, adds them to a list,
-returns this list
-"""
+
 def cleanerNew(file):
+    """
+    function that take a file as a parameter, retrieves its content ,
+    verify that certain characteristics are respected,
+    if they are, adds them to a list,
+    returns this list
+    """
     with open(file, "r") as f:
         good_list = []
         bad_list = []
@@ -124,9 +126,9 @@ def cleanerNew(file):
             badwriter =csv.writer(bad)
             for item in bad_list:
                 badwriter.writerow(item)
-                #message="erreur lors du clean" + bad_data
-                #mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
-                 #      'coucou', message, 'tapiecejointe.txt')
+                message="erreur lors du clean" + bad_data
+                mail.mailMe('boblepongedev92', 'casselboris92@gmail.com', 'boblepongedev92@gmail.com', 'spongebob;',
+                "informations du jour", message, 'tapiecejointe.txt')
 
             bad.close()
 
@@ -136,13 +138,14 @@ def cleanerNew(file):
 
 
                 ######################### VERIFICATION COHERENCE DES PRIX ###########################################@
-"""
-function that takes a string as parameter,
-slice it and cast it into an integer,
-and verifies the consistency of the data
-return the integer
-"""
+
 def checkPrice(price):
+    """
+    function that takes a string as parameter,
+    slice it and cast it into an integer,
+    and verifies the consistency of the data
+    return the integer
+    """
     # price sous la forme [1234]
     print(price)
     S = price[1:-1]
