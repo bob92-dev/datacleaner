@@ -6,11 +6,11 @@ import os
 import csv
 import shutil
 import mail
-# TODO /: enlever les doublons => les doublons peuvent etre identifiés par l'id de l'annonce
 # TODO : commenter le code
 # TODO : ajouter dans les fichiers de sortie, la premiere ligne du fichier initial qui contient le nom des col
 
 ################################# FONCTIONS######################################################
+
 
         ######################### CREATION DATE###########################################@
 """
@@ -46,13 +46,15 @@ def createList(file):
 """
 function that takes two parameters, one list and one file,
  search in the file for existing entries from the list,
- and add theses to a new list
+ and add theses to a new list,
+ check for the duplicates,
  returns this new list
 """
 
 def comparingTo(brands_list, ad_file):
 
-     brands_list_ok = []
+
+     brands_list_temporary = []
      print(ad_file)
      with open(ad_file, "r") as ad_list:
         reader = csv.reader(ad_list)
@@ -66,9 +68,14 @@ def comparingTo(brands_list, ad_file):
                                 url, id, publish_date, expiration_date, title, text, price, city, postal_code = ad
                                 if brand in title or brand in text:
                                     if brand in title or brand in text:
-                                        brands_list_ok.append(ad)
+                                            brands_list_temporary.append(ad)
 
+                brands_list_ok = []
+                for i in brands_list_temporary:
+                    if i not in brands_list_ok:
+                        brands_list_ok.append(i)
 
+        brands_list_ok.insert(0,list(first_line))
         return brands_list_ok
 
 
@@ -92,6 +99,7 @@ def cleanerNew(file):
         for line in reader:
             if len(line) == 9:
 
+
                 # On récupère les 9 colonnes
                 # Source Url,Id,Date Publication Annonce,Date Expiration Annonce,Titre,Texte Central,Prix,Ville,Code Postal
                 url, id, publish_date, expiration_date, title, text, price, city, postal_code = line
@@ -103,6 +111,7 @@ def cleanerNew(file):
 
                 if checked_price is not None:
                     good_list.append(line)
+
 
 
                 else:
@@ -120,6 +129,7 @@ def cleanerNew(file):
                  #      'coucou', message, 'tapiecejointe.txt')
 
             bad.close()
+
 
         return good_list
 
@@ -156,12 +166,13 @@ def checkPrice(price):
 
     ######################### CREATION DU REPERTOIRE DESTINATION DES FICHIERS ###########################################@
 
-input_file = "leboncoin.csv"
+my_path = os.getcwd()
+input_file = my_path +"/leboncoin.csv"
 output_dir = "source_" + my_date()
 file_prefix = "lbc_source_" + my_date()
 
 # Création répertoire de travail
-path = "source_" + my_date() + "/lbc_source_" + my_date()
+path = my_path + "source_" + my_date() + "/lbc_source_" + my_date()
 try:
     os.mkdir(output_dir)
     print("Create directory source_{}".format(output_dir))
